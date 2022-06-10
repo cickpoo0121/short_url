@@ -10,6 +10,7 @@
 // @ is an alias to /src
 // import HelloWorld from "@/components/HelloWorld.vue";
 import InputForm from "@/components/InputForm.vue";
+// import * as shorten from "@/utils/shortURL.js";
 
 export default {
   name: "Home",
@@ -17,5 +18,13 @@ export default {
     // HelloWorld,
     InputForm,
   },
+  // data() {
+  //   return {};
+  // },
+  // async mounted() {
+  //   // console.log(helper);
+  //   const res = await shorten.test({ method: "get" });
+  //   console.log(res);
+  // },
 };
 </script>
