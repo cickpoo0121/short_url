@@ -26,8 +26,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post("/shorturl", async (req, res) => {
   let { fullUrl } = req.body;
-  let shorturl = shortId.generate();
+  let genShortId = shortId.generate();
   try {
+    // being transaction
     await con.promise().beginTransaction((err) => {
       if (err) {
         console.log("connection fail");
@@ -35,6 +36,7 @@ app.post("/shorturl", async (req, res) => {
       }
     });
 
+    // insert short url
     let insertShortUrl =
       "INSERT INTO `url` (`url_full`, `url_short`) VALUES (?,?);";
 
@@ -42,15 +44,18 @@ app.post("/shorturl", async (req, res) => {
       throw { msg: "url not collect", status: 400 };
     }
 
-    await con.promise().query(insertShortUrl, [fullUrl, shorturl], (err) => {
+    await con.promise().query(insertShortUrl, [fullUrl, genShortId], (err) => {
       if (err) {
         console.log(err);
         throw { msg: "Internal Server Error", status: 500 };
       }
     });
 
+    // commit query
     await con.promise().commit();
-    res.status(200).json({ shortId: shorturl, status: 200 });
+    res
+      .status(200)
+      .json({ shorturl: "http://localhost:3500/" + genShortId, status: 200 });
   } catch (error) {
     console.log(error);
     con.promise().rollback();
@@ -58,10 +63,10 @@ app.post("/shorturl", async (req, res) => {
   }
 });
 
-app.get("/short/:id", async (req, res) => {
-  console.log(req.headers);
+app.get("/:id", async (req, res) => {
+  // console.log(req.headers);
   const { id } = req.params;
-  console.log("========>", id);
+  // console.log("========>", id);
   try {
     await con.promise().beginTransaction((err) => {
       if (err) {
@@ -78,6 +83,10 @@ app.get("/short/:id", async (req, res) => {
         throw { msg: "Internal Server Error", status: 500 };
       }
     });
+
+    if (fullUrl.length === 0) {
+      throw { msg: "No data", status: 400 };
+    }
 
     let updateClick = "UPDATE `url` SET `clicked` = ? WHERE `url_id` = ?";
     await con
@@ -99,14 +108,14 @@ app.get("/short/:id", async (req, res) => {
   } catch (error) {
     console.log(error);
     con.promise().rollback();
-    res.status(error.status).send(error.msg);
+    res.status(error.status || 500).send(error.msg);
   }
 });
 
-app.get("/test/a", (req, res) => {
-  console.log(req.get("origin"));
-  res.send("aaa");
-});
+// app.get("/test/a", (req, res) => {
+//   console.log(req.get("origin"));
+//   res.send("aaa");
+// });
 
 const PORT = process.env.PORT || 3500;
 app.listen(PORT, () => {

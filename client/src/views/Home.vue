@@ -1,8 +1,24 @@
 <template>
   <div class="home">
-    <!-- <img alt="Vue logo" src="../assets/logo.png" /> -->
-    <!-- <HelloWorld msg="Welcome to Your Vue.js App" /> -->
-    <InputForm />
+    <v-snackbar
+      v-model="snackbar"
+      timeout="2000"
+      absolute
+      color="success"
+      text
+      top
+      right
+      elevation="1"
+    >
+      <strong class="text-right">Copied to clipboard</strong>
+
+      <!-- <template v-slot:action="{ attrs }">
+        <v-btn color="success" text v-bind="attrs" @click="snackbar = false">
+          Close
+        </v-btn>
+      </template> -->
+    </v-snackbar>
+    <InputForm class="mt-10" @on-submit="showSnackbar" />
   </div>
 </template>
 
@@ -18,13 +34,16 @@ export default {
     // HelloWorld,
     InputForm,
   },
-  // data() {
-  //   return {};
-  // },
-  // async mounted() {
-  //   // console.log(helper);
-  //   const res = await shorten.test({ method: "get" });
-  //   console.log(res);
-  // },
+  data() {
+    return {
+      snackbar: false,
+    };
+  },
+  methods: {
+    showSnackbar() {
+      this.snackbar = true;
+      console.log("show snackbar");
+    },
+  },
 };
 </script>

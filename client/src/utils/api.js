@@ -13,7 +13,7 @@ export const fetchAPI = async ({ method, url, data = {} }) => {
       //   "Access-Control-Allow-Origin": "*",
       //   "Content-Type": "application/json",
       // },
-      headers: { "Access-Control-Allow-Origin": "*" },
+      // headers: { "Access-Control-Allow-Origin": "*" },
     });
     return res;
   } catch (error) {
