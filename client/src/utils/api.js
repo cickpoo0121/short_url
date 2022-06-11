@@ -15,6 +15,7 @@ export const fetchAPI = async ({ method, url, data = {} }) => {
       // },
       // headers: { "Access-Control-Allow-Origin": "*" },
     });
+    console.log(res);
     return res;
   } catch (error) {
     console.log(error.response.data);
