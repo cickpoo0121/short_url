@@ -43,6 +43,7 @@ const routes = [
       // return false;
     },
   },
+  { path: "*", component: () => import("../views/NotFound.vue") },
   // {
   //   path: "/about",
   //   name: "About",

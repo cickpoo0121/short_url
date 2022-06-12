@@ -59,7 +59,7 @@ app.post("/shorturl", async (req, res) => {
     await conPromise.commit();
     res
       .status(200)
-      .json({ shorturl: "http://localhost:3500/" + genShortId, status: 200 });
+      .json({ shorturl: `${req.headers.host}/${genShortId}`, status: 200 });
   } catch (error) {
     console.log(error);
     conPromise.rollback();
@@ -163,7 +163,7 @@ app.post("/login", async (req, res) => {
 
 app.post("/admin/history", verifyToken, async (req, res) => {
   try {
-    let queryAllUrl = "SELECT * FROM `url`";
+    let queryAllUrl = "SELECT * FROM `url` ORDER BY url_id DESC";
     const [allUrl] = await conPromise.query(queryAllUrl).catch((err) => {
       console.log(err);
       throw { msg: "Internal Server Error", status: 500 };
