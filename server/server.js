@@ -1,7 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const con = require("./config/db");
-const conPromise = con.promise();
 const shortId = require("shortid");
 const cors = require("cors");
 const bcrypt = require("bcrypt");
@@ -34,14 +33,6 @@ app.post("/shorturl", async (req, res) => {
   let { fullUrl } = req.body;
   let genShortId = shortId.generate();
   try {
-    // being transaction
-    await conPromise.beginTransaction((err) => {
-      if (err) {
-        console.log("connection fail");
-        throw { msg: "connection fail", status: 500 };
-      }
-    });
-
     // insert short url
     let insertShortUrl =
       "INSERT INTO `url` (`url_full`, `url_short`) VALUES (?,?);";
@@ -50,21 +41,18 @@ app.post("/shorturl", async (req, res) => {
       throw { msg: "url not collect", status: 400 };
     }
 
-    await conPromise.query(insertShortUrl, [fullUrl, genShortId], (err) => {
+    await con.query(insertShortUrl, [fullUrl, genShortId], (err) => {
       if (err) {
         console.log(err);
         throw { msg: "Internal Server Error", status: 500 };
       }
     });
 
-    // commit query
-    await conPromise.commit();
     res
       .status(200)
       .json({ shorturl: `${req.headers.host}/${genShortId}`, status: 200 });
   } catch (error) {
     console.log(error);
-    conPromise.rollback();
     res.status(error.status || 500).send(error.msg || "Internal Server Error");
   }
 });
@@ -75,16 +63,9 @@ app.get("/:id", async (req, res) => {
   const { id } = req.params;
   // console.log("========>", id);
   try {
-    await conPromise.beginTransaction((err) => {
-      if (err) {
-        console.log("connection fail");
-        throw { msg: "connection fail", status: 500 };
-      }
-    });
-
     let queryFullUrl = "SELECT * FROM `url` WHERE url_short = ?";
 
-    let [fullUrl] = await conPromise.query(queryFullUrl, [id], (err) => {
+    let [fullUrl] = await con.query(queryFullUrl, [id], (err) => {
       if (err) {
         console.log(err);
         throw { msg: "Internal Server Error", status: 500 };
@@ -96,7 +77,7 @@ app.get("/:id", async (req, res) => {
     }
 
     let updateClick = "UPDATE `url` SET `clicked` = ? WHERE `url_id` = ?";
-    await conPromise.query(
+    await con.query(
       updateClick,
       [fullUrl[0].clicked + 1, fullUrl[0].url_id],
       (err) => {
@@ -107,12 +88,9 @@ app.get("/:id", async (req, res) => {
       }
     );
 
-    // if(fullUrl){]}
-    await conPromise.commit();
     res.redirect(fullUrl[0].url_full);
   } catch (error) {
     console.log(error);
-    conPromise.rollback();
     res.status(error.status || 500).send(error.msg || "Internal Server Error");
   }
 });
@@ -124,14 +102,12 @@ app.post("/login", async (req, res) => {
   try {
     // query user for check in system
     const querUser = "SELECT * FROM `user` WHERE user_name=?";
-    const [[user]] = await conPromise
-      .query(querUser, [username])
-      .catch((err) => {
-        if (err) {
-          console.log(err);
-          throw { msg: "Internal Server Error", status: 500 };
-        }
-      });
+    const [[user]] = await con.query(querUser, [username]).catch((err) => {
+      if (err) {
+        console.log(err);
+        throw { msg: "Internal Server Error", status: 500 };
+      }
+    });
 
     // user not found
     if (!user) {
@@ -162,7 +138,7 @@ app.post("/login", async (req, res) => {
 app.post("/admin/history", verifyToken, async (req, res) => {
   try {
     let queryAllUrl = "SELECT * FROM `url` ORDER BY url_id DESC";
-    const [allUrl] = await conPromise.query(queryAllUrl).catch((err) => {
+    const [allUrl] = await con.query(queryAllUrl).catch((err) => {
       console.log(err);
       throw { msg: "Internal Server Error", status: 500 };
     });
