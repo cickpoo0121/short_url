@@ -71,13 +71,17 @@ export default {
       try {
         this.loading = true;
         const validate = this.$refs.form.validate();
-        if (!validate) return;
+        if (!validate) {
+          this.loading = false;
+          return;
+        }
         //   console.log(this.fullURL);
         const res = await shorturl.makeShorten(this.fullURL);
         this.shortURL = res.data.shorturl;
         this.loading = false;
         this.snackbar = true;
       } catch (error) {
+        this.loading = false;
         console.log(error);
         alert(error);
       }
