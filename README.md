@@ -32,6 +32,7 @@ This project has folders two servers for client and backend.
 
     ```bash
     cd server
+    npm i
     npx nodemon
     ```
 
@@ -39,6 +40,7 @@ This project has folders two servers for client and backend.
 
     ```bash
     cd client
+    npm i
     npm run serve
     ```
 
