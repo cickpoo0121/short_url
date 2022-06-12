@@ -120,7 +120,7 @@ app.get("/:id", async (req, res) => {
 // login
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
-  console.log(req.body);
+
   try {
     // query user for check in system
     const querUser = "SELECT * FROM `user` WHERE user_name=?";
