@@ -1,32 +1,64 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view />
+  <div>
+    <v-app>
+      <v-app-bar app color="primary" dark>
+        <router-link to="/">
+          <h1 class="white--text">SHORTO URL</h1></router-link
+        >
+        <v-spacer></v-spacer>
+        <router-link
+          v-if="currentRouteName === '/' && !isLoggedIn()"
+          to="/login"
+        >
+          <v-btn color="white" class="primary--text"
+            ><strong>Login</strong></v-btn
+          >
+        </router-link>
+        <router-link
+          v-if="isLoggedIn() && currentRouteName === '/'"
+          to="/admin"
+        >
+          <v-btn color="white" class="primary--text"
+            ><strong>Back to admin</strong>
+          </v-btn>
+        </router-link>
+
+        <v-btn
+          v-if="isLoggedIn() && currentRouteName === '/admin'"
+          color="white"
+          class="primary--text"
+          @click="logout"
+          ><strong>Logout</strong>
+        </v-btn>
+      </v-app-bar>
+      <v-main>
+        <router-view />
+      </v-main>
+      <v-footer color="primary lighten-1" padless>
+        <v-col class="text-center white--text" cols="12">
+          <strong>© 2022 Copyright</strong>
+        </v-col>
+      </v-footer>
+    </v-app>
   </div>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+<script>
+export default {
+  name: "App",
+  computed: {
+    currentRouteName() {
+      return this.$route.path;
+    },
+  },
+  methods: {
+    logout() {
+      sessionStorage.clear();
+      this.$router.replace("/");
+    },
+    isLoggedIn() {
+      return sessionStorage.getItem("isLoggedIn");
+    },
+  },
+};
+</script>

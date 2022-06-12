@@ -1,18 +1,40 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <v-snackbar
+      v-model="snackbar"
+      timeout="2000"
+      absolute
+      color="success"
+      text
+      top
+      right
+      elevation="1"
+    >
+      <strong class="text-right">Copied to clipboard</strong>
+    </v-snackbar>
+    <InputForm class="mt-10" @on-submit="showSnackbar" />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
+import InputForm from "@/components/InputForm.vue";
 
 export default {
   name: "Home",
   components: {
-    HelloWorld,
+    InputForm,
+  },
+  data() {
+    return {
+      snackbar: false,
+    };
+  },
+  methods: {
+    showSnackbar() {
+      this.snackbar = true;
+      // console.log("show snackbar");
+    },
   },
 };
 </script>
