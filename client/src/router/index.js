@@ -24,35 +24,20 @@ const routes = [
     name: "AdminHome",
     component: () => import("../views/AdminHome.vue"),
     beforeEnter: (to, from, next) => {
-      // console.log(store.state.token);
-      // next((vm) => {
-      //   console.log(vm);
-      // });
+      // check before enter route
       if (
         !sessionStorage.getItem("isLoggedIn") ||
         !sessionStorage.getItem("token")
       ) {
-        // console.log(store.state);
         next("/");
       } else {
         next();
       }
-      // console.log(to, from);
-      // console.log(store.state);
-      // reject the navigation
-      // return false;
     },
   },
+
+  // handel 404 not found page
   { path: "*", component: () => import("../views/NotFound.vue") },
-  // {
-  //   path: "/about",
-  //   name: "About",
-  //   // route level code-splitting
-  //   // this generates a separate chunk (about.[hash].js) for this route
-  //   // which is lazy-loaded when the route is visited.
-  //   component: () =>
-  //     import(/* webpackChunkName: "about" */ "../views/About.vue"),
-  // },
 ];
 
 const router = new VueRouter({

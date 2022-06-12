@@ -30,7 +30,7 @@
       :items="allUrl"
       :items-per-page="5"
       class="elevation-1 mt-10"
-      :loading="allUrl"
+      :loading="loading"
       loading-text="Loading... Please wait"
     ></v-data-table>
   </v-container>
@@ -44,6 +44,7 @@ export default {
     return {
       allUrl: [],
       today: [],
+      loading: true,
       headers: [
         { text: "Full URL", value: "url_full", align: "center" },
         { text: "Short ID", value: "url_short", align: "center" },
@@ -54,22 +55,24 @@ export default {
   async mounted() {
     try {
       const res = await shorturl.history(sessionStorage.getItem("token"));
+      // invalid token
       if (!res.status && res.response.status === 403) {
         alert(res.response.data);
         this.$router.replace("/");
         sessionStorage.clear();
-        console.log(res.response.status);
+        // console.log(res.response.status);
       }
-      // console.log(new Date(Date.now()).toISOString().substring(0, 10));
+
+      // set all url data
       this.allUrl = res.data;
+
+      // set tody generate url
       this.today = this.allUrl.filter(
         (el) =>
           el.timestamp.substring(0, 10) ===
           new Date(Date.now()).toISOString().substring(0, 10)
       );
-      console.log(this.today);
-      // console.log(res);
-      console.log(this.allUrl);
+      this.loading = false;
     } catch (error) {
       console.log(error);
     }

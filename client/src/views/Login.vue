@@ -69,30 +69,24 @@ export default {
   },
 
   methods: {
+    // login
     async handleLogin() {
       try {
         const validate = this.$refs.form.validate();
         if (!validate) return;
 
-        // console.log(this.username, this.password);
         const res = await shorturl.login({
           username: this.username,
           password: this.password,
         });
 
-        // console.log(res);
-
         if (!res.status && res.response.status !== 200) {
           throw res.response;
         }
 
-        // await this.$store.dispatch("setToken", res.data.token);
         sessionStorage.setItem("token", res.data.token);
         sessionStorage.setItem("isLoggedIn", true);
         this.$router.push("admin");
-        // if(res.)
-        // console.log("token", this.$store.state.token);
-        // console.log(res.data.token);
       } catch (error) {
         this.snackbar.show = true;
         this.snackbar.text = error.data;

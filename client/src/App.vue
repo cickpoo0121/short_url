@@ -48,19 +48,15 @@ export default {
   name: "App",
   computed: {
     currentRouteName() {
-      console.log("currentRouteName", this.$route.path === "/login");
-      // console.log("currentRouteName", this.$router.currentRoute.path === "/");
       return this.$route.path;
     },
   },
   methods: {
     logout() {
-      // this.$store.dispatch("setLogout");
       sessionStorage.clear();
       this.$router.replace("/");
     },
     isLoggedIn() {
-      // console.log(sessionStorage.getItem("isLoggedIn"));
       return sessionStorage.getItem("isLoggedIn");
     },
   },

@@ -66,6 +66,7 @@ export default {
     QrcodeVue,
   },
   methods: {
+    // generate short url
     async handleMakeShorturl() {
       try {
         this.loading = true;
@@ -76,25 +77,17 @@ export default {
         this.shortURL = res.data.shorturl;
         this.loading = false;
         this.snackbar = true;
-        //   console.log(res.data.shorturl);
-
-        // generate qr code
-        // this.generateQr(this.shortURL);
       } catch (error) {
         console.log(error);
         alert(error);
       }
     },
+
+    // copy short url to clip board
     handleCopyShorturl() {
       navigator.clipboard.writeText(this.shortURL);
       this.$emit("on-submit");
     },
-    // async generateQr(text) {
-    //   try {
-    //     const data = await QRCode.toDataURL(text);
-    //     console.log(data);
-    //   } catch (error) {}
-    // },
   },
 };
 </script>
