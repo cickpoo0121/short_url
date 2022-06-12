@@ -45,3 +45,10 @@ This project has folders two servers for client and backend.
     ```
 
 Open [http://localhost:8080](http://localhost:8080) with your browser to see the result.
+
+For test admin Dashboard:
+
+```bash
+username: admin
+password: 1234
+```
