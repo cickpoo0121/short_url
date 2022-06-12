@@ -10,7 +10,8 @@ This project has folders two servers for client and backend.
     git clone https://github.com/cickpoo0121/short_url.git
     ```
 
-2. Open /server/db folder then import the database
+2. Open /server/db folder then import the database in this project I will user [Xampp](https://www.apachefriends.org/download.html)
+    - How to import database to MySQL with xampp [click](https://www.youtube.com/watch?v=2ynKAAt1G4Y)
 
 3. Create .env file in root folder of server
 
