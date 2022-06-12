@@ -7,7 +7,7 @@
         >
         <v-spacer></v-spacer>
         <router-link
-          v-if="currentRouteName === '/' && !$store.state.isLoggedIn"
+          v-if="currentRouteName === '/' && !isLoggedIn()"
           to="/login"
         >
           <v-btn color="white" class="primary--text"
@@ -15,7 +15,7 @@
           >
         </router-link>
         <router-link
-          v-if="$store.state.isLoggedIn && currentRouteName === '/'"
+          v-if="isLoggedIn() && currentRouteName === '/'"
           to="/admin"
         >
           <v-btn color="white" class="primary--text"
@@ -24,7 +24,7 @@
         </router-link>
 
         <v-btn
-          v-if="$store.state.isLoggedIn && currentRouteName === '/admin'"
+          v-if="isLoggedIn() && currentRouteName === '/admin'"
           color="white"
           class="primary--text"
           @click="logout"
@@ -55,8 +55,13 @@ export default {
   },
   methods: {
     logout() {
-      this.$store.dispatch("setLogout");
+      // this.$store.dispatch("setLogout");
+      sessionStorage.clear();
       this.$router.replace("/");
+    },
+    isLoggedIn() {
+      // console.log(sessionStorage.getItem("isLoggedIn"));
+      return sessionStorage.getItem("isLoggedIn");
     },
   },
 };

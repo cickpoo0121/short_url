@@ -86,7 +86,9 @@ export default {
           throw res.response;
         }
 
-        await this.$store.dispatch("setToken", res.data.token);
+        // await this.$store.dispatch("setToken", res.data.token);
+        sessionStorage.setItem("token", res.data.token);
+        sessionStorage.setItem("isLoggedIn", true);
         this.$router.push("admin");
         // if(res.)
         // console.log("token", this.$store.state.token);

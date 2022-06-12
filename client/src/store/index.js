@@ -10,6 +10,7 @@ export default new Vuex.Store({
       state.token = token;
       if (token && state.token != null) {
         state.isLoggedIn = true;
+        sessionStorage.setItem("token", token);
       } else {
         state.isLoggedIn = false;
       }
@@ -17,6 +18,7 @@ export default new Vuex.Store({
     SET_LOGOUT(state) {
       state.token = "";
       state.isLoggedIn = false;
+      sessionStorage.clear();
     },
   },
   actions: {

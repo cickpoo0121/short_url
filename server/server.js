@@ -161,7 +161,7 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.get("/admin/history", verifyToken, async (req, res) => {
+app.post("/admin/history", verifyToken, async (req, res) => {
   try {
     let queryAllUrl = "SELECT * FROM `url`";
     const [allUrl] = await conPromise.query(queryAllUrl).catch((err) => {
@@ -175,6 +175,10 @@ app.get("/admin/history", verifyToken, async (req, res) => {
   }
 });
 
+// app.post("/verifyToken", verifyToken, (req, res) => {
+//   res.status(200).
+// });
+
 function verifyToken(req, res, next) {
   try {
     const token = req.headers["x-access-token"];
@@ -187,7 +191,7 @@ function verifyToken(req, res, next) {
     next();
   } catch (error) {
     console.log(error);
-    res.status(error.status || 500).send(error.msg || "Internal Server Error");
+    res.status(403).send("Access has blocked");
   }
 }
 

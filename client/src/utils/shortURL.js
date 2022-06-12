@@ -15,3 +15,15 @@ export function login(data) {
   // console.log("fetch", res);
   // return res;
 }
+
+export function history(token) {
+  const url = baseURL + "/admin/history";
+  return fetchAPI({
+    method: "post",
+    url,
+    headers: { "x-access-token": token },
+  });
+  // const res = await fetchAPI({ method: "post", url, data });
+  // console.log("fetch", res);
+  // return res;
+}

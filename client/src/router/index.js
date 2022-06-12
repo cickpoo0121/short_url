@@ -3,7 +3,7 @@ import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import axios from "axios";
 import VueAxios from "vue-axios";
-import store from "../store/index";
+// import store from "../store/index";
 
 Vue.use(VueRouter);
 Vue.use(VueAxios, axios);
@@ -28,7 +28,11 @@ const routes = [
       // next((vm) => {
       //   console.log(vm);
       // });
-      if (!store.state.isLoggedIn) {
+      if (
+        !sessionStorage.getItem("isLoggedIn") ||
+        !sessionStorage.getItem("token")
+      ) {
+        // console.log(store.state);
         next("/");
       } else {
         next();

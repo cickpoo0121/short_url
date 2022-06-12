@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const fetchAPI = async ({ method, url, data = {} }) => {
+export const fetchAPI = async ({ method, url, data = {}, headers }) => {
   try {
     // console.log(method, path, data);
     const res = await axios({
@@ -13,7 +13,7 @@ export const fetchAPI = async ({ method, url, data = {} }) => {
       //   "Access-Control-Allow-Origin": "*",
       //   "Content-Type": "application/json",
       // },
-      // headers: { "Access-Control-Allow-Origin": "*" },
+      headers: headers,
     });
     console.log(res);
     return res;
