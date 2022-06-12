@@ -28,11 +28,15 @@
     <v-data-table
       :headers="headers"
       :items="allUrl"
-      :items-per-page="5"
+      :items-per-page="10"
       class="elevation-1 mt-10"
       :loading="loading"
       loading-text="Loading... Please wait"
-    ></v-data-table>
+    >
+      <template v-slot:item.timestamp="{ item }"
+        >{{ offsetDate(item.timestamp) }}
+      </template>
+    </v-data-table>
   </v-container>
 </template>
 
@@ -47,7 +51,8 @@ export default {
       loading: true,
       headers: [
         { text: "Full URL", value: "url_full", align: "center" },
-        { text: "Short ID", value: "url_short", align: "center" },
+        { text: "SHORT ID", value: "url_short", align: "center" },
+        { text: "CREATED DATE TIME", value: "timestamp", align: "center" },
         { text: "CLICKED", value: "clicked", align: "center" },
       ],
     };
@@ -76,6 +81,20 @@ export default {
     } catch (error) {
       console.log(error);
     }
+  },
+  methods: {
+    // offset date
+    offsetDate(date) {
+      let offsetDate = new Date(
+        new Date(date).getTime() - new Date(date).getTimezoneOffset() * 60000
+      ).toISOString();
+
+      console.log(offsetDate);
+
+      return (
+        offsetDate.split("T")[0] + "\t" + offsetDate.split("T")[1].split(".")[0]
+      );
+    },
   },
 };
 </script>
