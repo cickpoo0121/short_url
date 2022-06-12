@@ -10,6 +10,7 @@ const jwt = require("jsonwebtoken");
 
 const app = express();
 
+// handel cors
 app.use(
   cors({
     origin: "http://localhost:8080",
@@ -28,6 +29,7 @@ app.use(
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// generate short url
 app.post("/shorturl", async (req, res) => {
   let { fullUrl } = req.body;
   let genShortId = shortId.generate();
@@ -67,6 +69,7 @@ app.post("/shorturl", async (req, res) => {
   }
 });
 
+// redirect url
 app.get("/:id", async (req, res) => {
   // console.log(req.headers);
   const { id } = req.params;
@@ -114,13 +117,7 @@ app.get("/:id", async (req, res) => {
   }
 });
 
-// app.get("/hash/:password", (req, res) => {
-//   bcrypt.hash(req.params.password, saltRounds, function (err, hash) {
-//     res.send(hash);
-//     // Store hash in your password DB.
-//   });
-// });
-
+// login
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
   console.log(req.body);
@@ -161,6 +158,7 @@ app.post("/login", async (req, res) => {
   }
 });
 
+// get all url to show in admin dashboard
 app.post("/admin/history", verifyToken, async (req, res) => {
   try {
     let queryAllUrl = "SELECT * FROM `url` ORDER BY url_id DESC";
@@ -175,10 +173,7 @@ app.post("/admin/history", verifyToken, async (req, res) => {
   }
 });
 
-// app.post("/verifyToken", verifyToken, (req, res) => {
-//   res.status(200).
-// });
-
+// verify token middleware
 function verifyToken(req, res, next) {
   try {
     const token = req.headers["x-access-token"];
@@ -195,9 +190,11 @@ function verifyToken(req, res, next) {
   }
 }
 
-// app.get("/test/a", (req, res) => {
-//   console.log(req.get("origin"));
-//   res.send("aaa");
+// app.get("/hash/:password", (req, res) => {
+//   bcrypt.hash(req.params.password, saltRounds, function (err, hash) {
+//     res.send(hash);
+//     // Store hash in your password DB.
+//   });
 // });
 
 const PORT = process.env.PORT || 3500;
